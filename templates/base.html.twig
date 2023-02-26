@@ -12,8 +12,13 @@
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
+
+        <script id="__bs_script__">//<![CDATA[
+            document.write("<script async src='http://HOST:3000/browser-sync/browser-sync-client.js?v=2.27.12'><\/script>".replace("HOST", location.hostname));
+            //]]></script>
+
     </head>
-    <body>
+    <body class="bg-slate-700">
         {% block body %}{% endblock %}
     </body>
 </html>
