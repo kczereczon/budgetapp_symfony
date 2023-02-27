@@ -5,16 +5,11 @@
 {% block body %}
     <div class="ml-auto mr-auto mt-12 p-8 text-white bg-indigo-300 w-1/2 bg-gradient-to-t from-slate-700 to-slate-600 rounded-md shadow-2xl">
         <div class="navigation flex">
-            <a href=""><div class="border-b-4 m-1">SIGN IN</div></a>
+            <a href=""><div class="border-b-4 m-1 border-blue-400">SIGN IN</div></a>
             <a href=""><div class="m-1 text-gray-500">SIGN UP</div></a>
         </div>
         <div>
-            <form action="" class="mt-4">
-                <label for="email" class="block uppercase text-gray-300 font-thin text-sm p-2">Email</label>
-                <input class="p-2 w-full rounded-md h-8 bg-slate-600 " type="text" name="email">
-                <label for="password" class="block uppercase text-gray-300 font-thin text-sm p-2">Password</label>
-                <input class="p-2 w-full rounded-md h-8 bg-slate-600 " type="password" name="password">
-            </form>
+            {{ form(registrationForm) }}
         </div>
     </div>
 {% endblock %}
