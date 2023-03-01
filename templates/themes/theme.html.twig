@@ -12,6 +12,28 @@
     </div>
 {%- endblock button_widget %}
 
+{%- block checkbox_row -%}
+    {%- set row_attr = row_attr|merge({ class: row_attr.class|default(row_class|default('mb-6 w-100')) }) -%}
+    {%- set widget_attr = {} -%}
+    {%- if help is not empty -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+    {%- endif -%}
+    <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
+        {{- form_errors(form) -}}
+        <div class="md:inline-flex flex items-center w-100">
+            {{- form_label(form) -}}
+            {{- form_widget(form, widget_attr) -}}
+        </div>
+        {{- form_help(form) -}}
+    </div>
+{%- endblock checkbox_row -%}
+
+
+{%- block checkbox_widget -%}
+    {%- set widget_class = widget_class|default('p-2 w-full rounded-md h-8 bg-slate-600') -%}
+    {{- parent() -}}
+{%- endblock checkbox_widget -%}
+
 {%- block form_widget_simple -%}
     <input type="{{ type }}"
            id="{{ id}}"
