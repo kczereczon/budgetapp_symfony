@@ -28,11 +28,15 @@
     </div>
 {%- endblock checkbox_row -%}
 
-
 {%- block checkbox_widget -%}
-    {%- set widget_class = widget_class|default('p-2 w-full rounded-md h-8 bg-slate-600') -%}
+    {%- set attr = attr|merge({class: (attr.class|default('checked:bg-white bg-slate-600 p-2 rounded-md appearance-none'))|trim}) -%}
     {{- parent() -}}
 {%- endblock checkbox_widget -%}
+
+{%- block radio_widget -%}
+    {%- set widget_class = widget_class|default('mr-2') -%}
+    {{- parent() -}}
+{%- endblock radio_widget -%}
 
 {%- block form_widget_simple -%}
     <input type="{{ type }}"
