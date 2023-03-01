@@ -20,10 +20,10 @@
     {%- endif -%}
     <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
         {{- form_errors(form) -}}
-        <div class="md:inline-flex flex items-center w-100">
-            {{- form_label(form) -}}
-            {{- form_widget(form, widget_attr) -}}
-        </div>
+            <div class="flex items-center">
+                {{- form_label(form) -}}
+                {{- form_widget(form, widget_attr) -}}
+            </div>
         {{- form_help(form) -}}
     </div>
 {%- endblock checkbox_row -%}
