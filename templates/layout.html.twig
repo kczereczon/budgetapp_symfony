@@ -1,17 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="flex p-8 h-full">
+    <div class="flex sm:flex-col flex-row p-8 h-full">
         <div class="basis-1/5 p-5 h-full">
-            <div class="bg-slate-600 p-5 rounded-md h-full uppercase text-md">
-                <ol>
-                    <li class="bg-slate-200 p-2 mb-1 rounded justify-center">Transactions</li>
-                    <li class="bg-slate-200 p-2 mb-1 rounded justify-center">Categories</li>
-                    <li class="bg-slate-200 p-2 mb-1 rounded justify-center">Subcategories</li>
-                    <li class="bg-slate-200 p-2 mb-1 rounded justify-center">Budgets</li>
-                    <li class="bg-slate-200 p-2 mb-1 rounded justify-center">Earning</li>
-                    <li class="bg-slate-200 p-2 mb-1 rounded justify-center">Wallets</li>
-                    <li class="bg-red-500 p-2 mb-1 rounded justify-center text-white"><a href="{{ path('app_logout') }}">Logout</a></li>
+            <div class="bg-slate-600 p-5 rounded-md h-full uppercase text-sm">
+                <ol class="flex items-center justify-center">
+                    <li class="bg-slate-200 p-1 mr-1 rounded justify-center text">Transactions</li>
+                    <li class="bg-slate-200 p-1 mr-1 rounded justify-center">Categories</li>
+                    <li class="bg-slate-200 p-1 mr-1 rounded justify-center">Subcategories</li>
+                    <li class="bg-slate-200 p-1 mr-1 rounded justify-center">Budgets</li>
+                    <li class="bg-slate-200 p-1 mr-1 rounded justify-center">Earning</li>
+                    <li class="bg-slate-200 p-1 mr-1 rounded justify-center">Wallets</li>
+                    <li class="bg-red-500 p-1 mr-1 rounded justify-center text-white"><a href="{{ path('app_logout') }}">Logout</a></li>
                 </ol>
             </div>
         </div>

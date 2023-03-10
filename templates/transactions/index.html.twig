@@ -1,5 +1,7 @@
 {% extends 'layout.html.twig' %}
 
-{% block content %}
+{% form_theme transactionForm 'transactions/form-theme.html.twig' %}
 
+{% block content %}
+    {{ form(transactionForm) }}
 {% endblock %}
