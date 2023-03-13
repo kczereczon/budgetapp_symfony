@@ -7,7 +7,7 @@
 
 {% block button_widget -%}
     <div class="mt-10 flex justify-center">
-        {%- set attr = attr|merge({class: (attr.class|default('bg-blue-400 hover:bg-blue-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'))|trim}) -%}
+        {%- set attr = attr|merge({class: (attr.class|default('btn bg-indigo-500 hover:bg-indigo-600 text-white whitespace-nowrap'))|trim}) -%}
         {{- parent() -}}
     </div>
 {%- endblock button_widget %}
@@ -88,11 +88,11 @@
 {%- endblock form_errors -%}
 
 {% block form_label_class -%}
-    block uppercase text-gray-300 font-thin text-sm p-2
+    block text-sm font-medium mb-1
 {% endblock form_label_class -%}
 
 {% block input_class -%}
-    {% if form.vars.errors|length %}border-red-500 border-2{% endif %} p-2 w-full rounded-md h-8 bg-slate-600
+    {% if form.vars.errors|length %}border-red-500 border-2{% endif %} form-input w-full
 {% endblock input_class -%}
 
 {% block form_group_class -%}
@@ -100,5 +100,5 @@
 {% endblock form_group_class -%}
 
 {% block custom_button_class -%}
-bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline
+    btn bg-indigo-500 hover:bg-indigo-600 text-white whitespace-nowrap
 {% endblock custom_button_class -%}
