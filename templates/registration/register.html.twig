@@ -1,16 +1,16 @@
-{% extends 'base.html.twig' %}
+{% extends 'layouts/authentication.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Login{% endblock %}
 {% form_theme registrationForm 'themes/theme.html.twig' %}
 
 {% block body %}
-    <div class="ml-auto mr-auto mt-12 p-8 text-white bg-indigo-300 w-1/2 bg-gradient-to-t from-slate-700 to-slate-600 rounded-md shadow-2xl">
-        <div class="navigation flex">
-            <a href="/register"><div class="border-b-4 m-1 border-blue-400">SIGN IN</div></a>
-            <a href="/login"><div class="m-1 text-gray-500">SIGN UP</div></a>
-        </div>
-        <div>
-            {{ form(registrationForm) }}
+    <h1 class="text-3xl text-slate-800 font-bold mb-6">{{ ('Create your Account') }} ✨</h1>
+    <!-- Form -->
+    {{ form(registrationForm) }}
+    <div class="pt-5 mt-6 border-t border-slate-200">
+        <div class="text-sm">
+            {{ ('Have an account?') }} <a class="font-medium text-indigo-500 hover:text-indigo-600"
+                                            href="{{ path('app_login') }}">{{ ('Sign In') }}</a>
         </div>
     </div>
 {% endblock %}

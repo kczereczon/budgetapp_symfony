@@ -5,6 +5,16 @@
     {{ block('form_widget_simple') }}
 {% endblock %}
 
+{%- block form_widget_compound -%}
+    <div class="space-y-4" {{ block('widget_container_attributes') }}>
+        {%- if form is rootform -%}
+            {{ form_errors(form) }}
+        {%- endif -%}
+        {{- block('form_rows') -}}
+        {{- form_rest(form) -}}
+    </div>
+{%- endblock form_widget_compound -%}
+
 {% block button_widget -%}
     <div class="mt-10 flex justify-center">
         {%- set attr = attr|merge({class: (attr.class|default('btn bg-indigo-500 hover:bg-indigo-600 text-white whitespace-nowrap'))|trim}) -%}
