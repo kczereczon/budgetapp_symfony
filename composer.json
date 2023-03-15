@@ -94,6 +94,8 @@
         }
     },
     "require-dev": {
+        "evotodi/seed-bundle": "^6.2",
+        "fakerphp/faker": "^1.21",
         "phpunit/phpunit": "^9.5",
         "symfony/browser-kit": "6.2.*",
         "symfony/css-selector": "6.2.*",
