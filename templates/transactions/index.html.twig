@@ -26,7 +26,7 @@
                 </div>
 
                 <!-- Search form -->
-                {% include 'components/transactions/transaction-table.html.twig' %}
+                {% include 'components/search.html.twig' with {'placeholder': "Search transaction..."} %}
 
                 <!-- Export button -->
                 <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">Export Transactions</button>
@@ -89,7 +89,7 @@
         </div>
 
         <!-- Table -->
-{#        <x-finance.transactions-table :transactions="$transactions" />#}
+        {% include 'components/transactions/transaction-table.html.twig' %}
 
         <!-- Pagination -->
         <div class="mt-8">
