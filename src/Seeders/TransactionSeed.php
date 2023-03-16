@@ -12,6 +12,9 @@ class TransactionSeed extends Seed
         return 'transaction';
     }
 
+    /**
+     * @throws \Exception
+     */
     public function load(
         \Symfony\Component\Console\Input\InputInterface $input,
         \Symfony\Component\Console\Output\OutputInterface $output
@@ -19,9 +22,10 @@ class TransactionSeed extends Seed
         $faker = \Faker\Factory::create();
 
         $subcategories = $this->manager->getManager()->getRepository(Subcategory::class)->findAll();
+        shuffle($subcategories);
 
         foreach ($subcategories as $subcategory) {
-            foreach (range(0, 100) as $i) {
+            foreach (range(0, random_int(1, 5)) as $i) {
                 $transaction = new \App\Entity\Transaction();
                 $transaction->setSubcategory($subcategory);
                 $transaction->setName($faker->word());

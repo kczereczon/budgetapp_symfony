@@ -18,11 +18,14 @@ class Category
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $emoji = null;
-
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Subcategory::class)]
     private Collection $subcategories;
+
+    #[ORM\Column(length: 255)]
+    private ?string $image_url = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $color = null;
 
     public function __construct()
     {
@@ -42,18 +45,6 @@ class Category
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getEmoji(): ?string
-    {
-        return $this->emoji;
-    }
-
-    public function setEmoji(?string $emoji): self
-    {
-        $this->emoji = $emoji;
 
         return $this;
     }
@@ -84,6 +75,30 @@ class Category
                 $subcategory->setCategory(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getImageUrl(): ?string
+    {
+        return $this->image_url;
+    }
+
+    public function setImageUrl(string $image_url): self
+    {
+        $this->image_url = $image_url;
+
+        return $this;
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(string $color): self
+    {
+        $this->color = $color;
 
         return $this;
     }

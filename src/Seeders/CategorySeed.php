@@ -11,6 +11,9 @@ class CategorySeed extends \Evotodi\SeedBundle\Command\Seed
         return 'category';
     }
 
+    /**
+     * @throws \Exception
+     */
     public function load(
         \Symfony\Component\Console\Input\InputInterface $input,
         \Symfony\Component\Console\Output\OutputInterface $output
@@ -19,7 +22,8 @@ class CategorySeed extends \Evotodi\SeedBundle\Command\Seed
 
         foreach (range(0, 5) as $i) {
             $category = new \App\Entity\Category();
-            $category->setEmoji($faker->emoji());
+            $category->setColor($faker->hexColor());
+            $category->setImageUrl($faker->imageUrl(category: 'budget'));
             $category->setName($faker->word());
             $this->manager->getManager()->persist($category);
         }
