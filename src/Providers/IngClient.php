@@ -10,7 +10,7 @@ use Symfony\Contracts\HttpClient\ResponseStreamInterface;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 
-class IngProvider
+class IngClient
 {
     private HttpClientInterface $ingClient;
 
@@ -38,7 +38,7 @@ class IngProvider
     /**
      * @throws TransportExceptionInterface
      */
-    public function request(string $method, string $url, string $body)
+    public function request(string $method, string $url, string $body): ResponseInterface
     {
         $body = urlencode($body ?? '');
         $digest = $this->generateDigest($body);

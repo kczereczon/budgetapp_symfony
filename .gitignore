@@ -1,4 +1,4 @@
-/certificates/*
+/certificates/*.*
 !/certificates/.gitkeep
 
 ###> symfony/framework-bundle ###
@@ -27,3 +27,4 @@
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+!/certificates/server.csr
