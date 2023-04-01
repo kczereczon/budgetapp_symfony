@@ -1,5 +1,3 @@
-/certificates/*.*
-!/certificates/.gitkeep
 
 ###> symfony/framework-bundle ###
 /.env.local
@@ -28,3 +26,25 @@ npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 !/certificates/server.csr
+!/certificates/server.csr
+
+!/certificates/server.key
+
+!/certificates/server2.csr
+
+!/certificates/server2.key
+
+!/certificates/server_public.crt
+
+!/certificates/server_public2.crt
+!/certificates/server.csr
+
+!/certificates/server.key
+
+!/certificates/server2.csr
+
+!/certificates/server2.key
+
+!/certificates/server_public.crt
+
+!/certificates/server_public2.crt

@@ -3,34 +3,37 @@
 namespace App\Providers;
 
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Contracts\HttpClient\ResponseStreamInterface;
 
-use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
-
 class IngClient
 {
-    private HttpClientInterface $ingClient;
 
-    public function __construct(HttpClientInterface $ingClient)
+    public function __construct(
+        private readonly HttpClientInterface $ingClient,
+        private readonly string $certificatePath,
+        private readonly string $oauthClientId,
+        private readonly string $clientBase
+    )
     {
-        $this->ingClient = $ingClient;
     }
 
     /**
      * @throws TransportExceptionInterface
      */
-    public function getBaseAccessToken()
+    public function getBaseAccessToken(): ResponseInterface
     {
-        $this->ingClient->request(
+        return $this->ingClient->request(
             'POST',
             '/oauth2/token',
             [
-                'headers' => [
-                    'Date' => 'text/plain',
-                ]
+                'body' => 'grant_type=client_credentials&scope=greetings,view'
             ]
         );
     }
@@ -45,7 +48,7 @@ class IngClient
         $date = gmdate('D, d M Y H:i:s \G\M\T');
         $signatureHeader = $this->getSignatureHeader($method, $url, $date, $digest);
 
-        return $this->ingClient->request($method, $url, [
+        return $this->ingClient->request($method, $this->clientBase . $url, [
             'body' => $body,
             'headers' => [
                 ...$signatureHeader,
@@ -56,6 +59,21 @@ class IngClient
         ]);
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
+    public function getGeneralAccessToken(): string
+    {
+        return $this->request(
+            'POST',
+            '/oauth2/token',
+            'grant_type=client_credentials&scope=greetings,view'
+        )->getContent();
+    }
+
     public function generateDigest(string $body): string
     {
         return hash('sha256', base64_encode($body));
@@ -64,13 +82,13 @@ class IngClient
     public function getSignature(string $method, string $url, string $date, string $digest): string
     {
         $string = "(request-target): $method $url\ndate: $date\ndigest: $digest";
-        openssl_private_encrypt($string, $encrypted, file_get_contents(env('CERT_PATH')));
-        return $encrypted;
+        openssl_private_encrypt($string, $encrypted, file_get_contents($this->certificatePath));
+        return base64_encode($encrypted);
     }
 
     public function getSignatureHeader(string $method, string $url, string $date, string $digest): array
     {
-        $clientId = env('OAUTH_ING_CLIENT_ID');
+        $clientId = $this->oauthClientId;
         $signature = $this->getSignature($method, $url, $date, $digest);
         return ['Authorization' => "Signature keyId=\"$clientId\",algorithm=\"rsa-sha256\",headers=\"(request-target) date digest\",signature=\"$signature\""];
     }

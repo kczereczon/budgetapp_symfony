@@ -16,19 +16,4 @@ class IngService
     {
         $this->ingClient = $ingClient;
     }
-
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ClientExceptionInterface
-     */
-    public function getGeneralAccessToken(): string
-    {
-        return $this->ingClient->request(
-            'POST',
-            '/oauth2/token',
-            'grant_type=client_credentials&scope=greetings,view'
-        )->getContent();
-    }
 }
