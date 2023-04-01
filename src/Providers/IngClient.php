@@ -47,15 +47,16 @@ class IngClient
         $digest = $this->generateDigest($body);
         $date = gmdate('D, d M Y H:i:s \G\M\T');
         $signatureHeader = $this->getSignatureHeader($method, $url, $date, $digest);
+        $headers = [
+            ...$signatureHeader,
+            'Date' => $date,
+            'Digest' => $digest,
+            'Content-Type' => 'application/x-www-form-urlencoded'
+        ];
 
         return $this->ingClient->request($method, $this->clientBase . $url, [
             'body' => $body,
-            'headers' => [
-                ...$signatureHeader,
-                'Date' => $date,
-                'Digest' => $digest,
-                'Content-Type' => 'application/x-www-form-urlencoded'
-            ]
+            'headers' => $headers
         ]);
     }
 
@@ -67,22 +68,24 @@ class IngClient
      */
     public function getGeneralAccessToken(): string
     {
-        return $this->request(
+        $request = $this->request(
             'POST',
             '/oauth2/token',
             'grant_type=client_credentials&scope=greetings,view'
-        )->getContent();
+        );
+
+        return $request->getContent();
     }
 
     public function generateDigest(string $body): string
     {
-        return hash('sha256', base64_encode($body));
+        return 'SHA-256=' . base64_encode(hash('sha256', $body, true));
     }
 
     public function getSignature(string $method, string $url, string $date, string $digest): string
     {
         $string = "(request-target): $method $url\ndate: $date\ndigest: $digest";
-        openssl_private_encrypt($string, $encrypted, file_get_contents($this->certificatePath));
+        openssl_sign($string, $encrypted, file_get_contents($this->certificatePath), OPENSSL_ALGO_SHA256);
         return base64_encode($encrypted);
     }
 
@@ -90,6 +93,6 @@ class IngClient
     {
         $clientId = $this->oauthClientId;
         $signature = $this->getSignature($method, $url, $date, $digest);
-        return ['Authorization' => "Signature keyId=\"$clientId\",algorithm=\"rsa-sha256\",headers=\"(request-target) date digest\",signature=\"$signature\""];
+        return ['Authorization' => "Signature: keyId=\"$clientId\",algorithm=\"rsa-sha256\",headers=\"(request-target) date digest\",signature=\"$signature\""];
     }
 }
