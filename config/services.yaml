@@ -24,9 +24,10 @@ services:
     App\Providers\IngClient:
         public: true
         arguments:
-            $certificatePath: '%env(resolve:CERT_PATH)%'
             $oauthClientId: '%env(resolve:OAUTH_ING_CLIENT_ID)%'
             $clientBase: '%env(resolve:ING_API_BASE)%'
+            $rsaPrivateKeyPath: '%env(resolve:PRIVATE_KEY_PATH)%'
+            $certificatePath: '%env(resolve:CERT_PATH)%'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

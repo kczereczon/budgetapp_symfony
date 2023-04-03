@@ -2,12 +2,3 @@ when@dev:
     _errors:
         resource: '@FrameworkBundle/Resources/config/routing/errors.xml'
         prefix: /_error
-framework:
-    http_client:
-        scoped_clients:
-            # only requests matching scope will use these options
-            ing.client:
-                scope: 'https://api.ing.com'
-                headers:
-                    Accept: 'application/x-www-form-urlencoded'
-                # ...

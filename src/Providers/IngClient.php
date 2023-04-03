@@ -17,9 +17,10 @@ class IngClient
 
     public function __construct(
         private readonly HttpClientInterface $ingClient,
-        private readonly string $certificatePath,
         private readonly string $oauthClientId,
-        private readonly string $clientBase
+        private readonly string $clientBase,
+        private readonly string $rsaPrivateKeyPath,
+        private readonly string $certificatePath
     )
     {
     }
@@ -51,12 +52,14 @@ class IngClient
             ...$signatureHeader,
             'Date' => $date,
             'Digest' => $digest,
-            'Content-Type' => 'application/x-www-form-urlencoded'
+            'Content-Type' => 'application/x-www-form-urlencoded',
         ];
 
         return $this->ingClient->request($method, $this->clientBase . $url, [
             'body' => $body,
-            'headers' => $headers
+            'headers' => $headers,
+            'local_cert' => $this->certificatePath,
+            'local_pk' => $this->rsaPrivateKeyPath
         ]);
     }
 
@@ -82,10 +85,14 @@ class IngClient
         return 'SHA-256=' . base64_encode(hash('sha256', $body, true));
     }
 
+    /**
+     * @throws \Exception
+     */
     public function getSignature(string $method, string $url, string $date, string $digest): string
     {
         $string = "(request-target): $method $url\ndate: $date\ndigest: $digest";
-        openssl_sign($string, $encrypted, file_get_contents($this->certificatePath), OPENSSL_ALGO_SHA256);
+        openssl_sign($string, $encrypted, file_get_contents($this->rsaPrivateKeyPath), OPENSSL_ALGO_SHA256);
+
         return base64_encode($encrypted);
     }
 
