@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -41,6 +42,7 @@ class IngClient
 
     /**
      * @throws TransportExceptionInterface
+     * @throws Exception
      */
     public function request(string $method, string $url, string $body): ResponseInterface
     {
@@ -58,8 +60,6 @@ class IngClient
         return $this->ingClient->request($method, $this->clientBase . $url, [
             'body' => $body,
             'headers' => $headers,
-            'local_cert' => $this->certificatePath,
-            'local_pk' => $this->rsaPrivateKeyPath
         ]);
     }
 
@@ -86,20 +86,25 @@ class IngClient
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function getSignature(string $method, string $url, string $date, string $digest): string
     {
-        $string = "(request-target): $method $url\ndate: $date\ndigest: $digest";
+        $string = trim("(request-target): $method $url
+date: $date
+digest: $digest");
         openssl_sign($string, $encrypted, file_get_contents($this->rsaPrivateKeyPath), OPENSSL_ALGO_SHA256);
 
         return base64_encode($encrypted);
     }
 
+    /**
+     * @throws Exception
+     */
     public function getSignatureHeader(string $method, string $url, string $date, string $digest): array
     {
         $clientId = $this->oauthClientId;
         $signature = $this->getSignature($method, $url, $date, $digest);
-        return ['Authorization' => "Signature: keyId=\"$clientId\",algorithm=\"rsa-sha256\",headers=\"(request-target) date digest\",signature=\"$signature\""];
+        return ['Authorization' => "Signature keyId=\"$clientId\", algorithm=\"rsa-sha256\", headers=\"(request-target) date digest\", signature=\"$signature\""];
     }
 }
