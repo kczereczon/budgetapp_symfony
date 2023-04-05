@@ -27,12 +27,12 @@ class IngClientTest extends KernelTestCase
     /**
      * @throws \Exception
      */
-    public function testGetSignatureDigest(): void
+    public function testGetSignature(): void
     {
         $kernel = self::bootKernel();
         $ingClient = static::getContainer()->get(IngClient::class);
         $this->assertEquals([
-            'Authorization' => 'Signature keyId="asdf", algorithm="rsa-sha256",headers="(request-target) date digest", signature="oNzci3xvxD6CqQjYmLXXRFOtQYttDXE2am87H85OtGb3HTx4Wktmghnyxq4Jzo3ZP6L7JQzu6sHKv5M70lkbh1J7hUPOIKTlN4NIew++2kWrOkfODvSxCKQJm42xNwSB/Iw5qXPih4XlgLFQvkDJzn0v2hlt1aUyGA0LawAQ1fq6tTW6XPVvwSgEN7Cpa4xn+U7MK9s+rpPICjbyMPwQkvMuXEvTq5Vr5+nQgUjyq4dJVJtj/tKWO4zpKlABRWpB1JJjobQOVK/KW6Tpl1StTnQlGcTlEcw7/96bYAFnDPLtrB/O6PpEWwjWg0lg7ZVoHMRWtHXchqfGJsSAQq6wfw=="'
+            'Authorization' => 'Signature keyId="SN=546212FB",algorithm="rsa-sha256",headers="(request-target) date digest",signature="UOxMoSIebpl7CCs9pquEe1FqkQp37QxoPnn+0iHYJVke6q3fq63SFJ9rT3nnkTHj7XX20Mx7LvY8N0nrq4BZKmG4bxtA6MDVaGKW+5Sq9jWY/MVPcTQsyWRaIrxp3z+ZjkNLT0Cu/zyyfegCAFfSlNBMs+TdPv9V5Z+ctkPIWD1PLsoi1//SpNLxFQN8UDIk53A7b8MPLXVG+GcYeDLsfOsoKO4CfTgwGrFRcpH6vpiHbVHf0LDCkGku6DFQWnUrZF+Gg+6xJ4eNkhAdlgJ9H0pNqI/672g9fvcIrAJkLZHZEm93MAgBc7xx+LyDfGkA1l9ENnkqRw6bdDlSspzbGw=="'
         ], $ingClient->getSignatureHeader('post', '/foo?param=value&pet=dog', 'Sun, 05 Jan 2014 21:31:40 GMT', 'SHA-256=X48E9qOokqqrvdts8nOJRJN3OWDUoyWxBf7kbu9DBPE='));
     }
 }

@@ -20,8 +20,10 @@ class IngClient
         private readonly HttpClientInterface $ingClient,
         private readonly string $oauthClientId,
         private readonly string $clientBase,
-        private readonly string $rsaPrivateKeyPath,
-        private readonly string $certificatePath
+        private readonly string $privateKeySigning,
+        private readonly string $privateKeyTls,
+        private readonly string $certificateSigning,
+        private readonly string $certificateTls,
     )
     {
     }
@@ -44,10 +46,10 @@ class IngClient
      * @throws TransportExceptionInterface
      * @throws Exception
      */
-    public function request(string $method, string $url, string $body): ResponseInterface
+    public function request(string $method, string $url, array $body = []): ResponseInterface
     {
-        $body = urlencode($body ?? '');
-        $digest = $this->generateDigest($body);
+        $encodedBody = http_build_query($body);
+        $digest = $this->generateDigest($encodedBody);
         $date = gmdate('D, d M Y H:i:s \G\M\T');
         $signatureHeader = $this->getSignatureHeader($method, $url, $date, $digest);
         $headers = [
@@ -58,8 +60,10 @@ class IngClient
         ];
 
         return $this->ingClient->request($method, $this->clientBase . $url, [
-            'body' => $body,
+            'body' => $encodedBody,
             'headers' => $headers,
+            'local_pk' => $this->privateKeyTls,
+            'local_cert' => $this->certificateTls
         ]);
     }
 
@@ -74,7 +78,10 @@ class IngClient
         $request = $this->request(
             'POST',
             '/oauth2/token',
-            'grant_type=client_credentials&scope=greetings,view'
+            [
+                'grant_type' => 'client_credentials',
+                'scope' => 'greetings:view'
+            ]
         );
 
         return $request->getContent();
@@ -93,7 +100,7 @@ class IngClient
         $string = trim("(request-target): $method $url
 date: $date
 digest: $digest");
-        openssl_sign($string, $encrypted, file_get_contents($this->rsaPrivateKeyPath), OPENSSL_ALGO_SHA256);
+        openssl_sign($string, $encrypted, file_get_contents($this->privateKeySigning), OPENSSL_ALGO_SHA256);
 
         return base64_encode($encrypted);
     }
