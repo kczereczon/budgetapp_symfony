@@ -97,9 +97,7 @@ class IngClient
      */
     public function getSignature(string $method, string $url, string $date, string $digest): string
     {
-        $string = trim("(request-target): $method $url
-date: $date
-digest: $digest");
+        $string = trim("(request-target): $method $url\ndate: $date\ndigest: $digest");
         openssl_sign($string, $encrypted, file_get_contents($this->privateKeySigning), OPENSSL_ALGO_SHA256);
 
         return base64_encode($encrypted);
