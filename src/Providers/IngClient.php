@@ -110,6 +110,6 @@ class IngClient
     {
         $clientId = $this->oauthClientId;
         $signature = $this->getSignature($method, $url, $date, $digest);
-        return ['Authorization' => "Signature keyId=\"$clientId\", algorithm=\"rsa-sha256\", headers=\"(request-target) date digest\", signature=\"$signature\""];
+        return ['authorization' => "Signature keyId=\"$clientId\",algorithm=\"rsa-sha256\",headers=\"(request-target) date digest\",signature=\"$signature\""];
     }
 }
