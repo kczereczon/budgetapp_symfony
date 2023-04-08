@@ -57,6 +57,7 @@ class IngClient
             'Date' => $date,
             'Digest' => $digest,
             'Content-Type' => 'application/x-www-form-urlencoded',
+            'Accept' => 'application/json',
         ];
 
         return $this->ingClient->request($method, $this->clientBase . $url, [
@@ -110,6 +111,6 @@ class IngClient
     {
         $clientId = $this->oauthClientId;
         $signature = $this->getSignature($method, $url, $date, $digest);
-        return ['authorization' => "Signature keyId=\"$clientId\",algorithm=\"rsa-sha256\",headers=\"(request-target) date digest\",signature=\"$signature\""];
+        return ['Authorization' => "Signature keyId=\"$clientId\",algorithm=\"rsa-sha256\",headers=\"(request-target) date digest\",signature=\"$signature\""];
     }
 }
