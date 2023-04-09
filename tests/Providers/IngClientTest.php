@@ -27,12 +27,23 @@ class IngClientTest extends KernelTestCase
     /**
      * @throws \Exception
      */
-    public function testGetSignature(): void
+    public function testSignature(): void
     {
         $kernel = self::bootKernel();
         $ingClient = static::getContainer()->get(IngClient::class);
-        $this->assertEquals([
-            'Authorization' => 'Signature keyId="SN=546212fb",algorithm="rsa-sha256",headers="(request-target) date digest",signature="T9q4eglBin/DS85oN649MfsWRJCl150rL1SAjI30e8UXNRW21468KBiUPPImIOCHo6PTpAZnVQhaRrICoY4zVBWLHHcePNb59x9lEoV2u/uZvsySMgsEQu3oRbeA1GWa+Tl3Y9nSjmSOj2oY10TGtuG46tQueXvtOnNlQHpQihkt2OLjwanh1e+3vgw1tnvD80huTAVKZ3oOJdFLnL69yUK14FugTRu6fojabuCqkoDIoVZJgy4du/7UtVHq31eNwvLwRBZS9MkNgfheYHgImGq0Z8/Mu6wLXgLoirQxrzMPjAadMOQu7rvThBAImMdIjrFDDJIHcoXsxEMWib/MiQ=="'
-        ], $ingClient->getSignatureHeader('post', '/foo?param=value&pet=dog', 'Sun, 05 Jan 2014 21:31:40 GMT', 'SHA-256=X48E9qOokqqrvdts8nOJRJN3OWDUoyWxBf7kbu9DBPE='));
+
+        $method = "POST";
+        $url = "/foo?param=value&pet=dog";
+        $date = "Sun, 05 Jan 2014 21:31:40 GMT";
+        $digest = "SHA-256=X48E9qOokqqrvdts8nOJRJN3OWDUoyWxBf7kbu9DBPE=";
+
+        $data = strtolower(trim("(request-target): $method $url\ndate: $date\ndigest: $digest"));
+        $signature = base64_decode($ingClient->getSignature($method, $url, $date, $digest));
+        $certPath = $_ENV['CERTIFICATE_PATH_SIGNING'];
+
+        $verify = openssl_verify($data, $signature, file_get_contents($certPath));
+
+
+        $this->assertTrue((bool)$verify);
     }
 }
