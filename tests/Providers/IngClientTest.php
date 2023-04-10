@@ -40,8 +40,9 @@ class IngClientTest extends KernelTestCase
         $data = strtolower(trim("(request-target): $method $url\ndate: $date\ndigest: $digest"));
         $signature = base64_decode($ingClient->getSignature($method, $url, $date, $digest));
         $certPath = $_ENV['CERTIFICATE_PATH_SIGNING'];
+        $publicKey = openssl_get_publickey(file_get_contents($certPath));
 
-        $verify = openssl_verify($data, $signature, file_get_contents($certPath));
+        $verify = openssl_verify($data, $signature, $publicKey);
 
 
         $this->assertTrue((bool)$verify);
