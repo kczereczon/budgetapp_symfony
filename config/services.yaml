@@ -30,6 +30,7 @@ services:
             $privateKeyTls: '%env(resolve:PRIVATE_KEY_PATH_TLS)%'
             $certificateSigning: '%env(resolve:CERTIFICATE_PATH_SIGNING)%'
             $certificateTls: '%env(resolve:CERTIFICATE_PATH_TLS)%'
+            $pemSigningPath: '%env(resolve:PEM_PATH_SIGNING)%'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

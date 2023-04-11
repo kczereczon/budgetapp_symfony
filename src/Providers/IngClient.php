@@ -24,6 +24,7 @@ class IngClient
         private readonly string $privateKeyTls,
         private readonly string $certificateSigning,
         private readonly string $certificateTls,
+        private readonly string $pemSigningPath
     )
     {
     }
@@ -99,7 +100,8 @@ class IngClient
     public function getSignature(string $method, string $url, string $date, string $digest): string
     {
         $string = strtolower(trim("(request-target): $method $url\ndate: $date\ndigest: $digest"));
-        openssl_sign($string, $encrypted, file_get_contents($this->privateKeySigning), OPENSSL_ALGO_SHA256);
+        $privateKey = openssl_pkey_get_private($this->pemSigningPath);
+        openssl_sign($string, $encrypted, $privateKey, OPENSSL_ALGO_SHA256);
 
         return base64_encode($encrypted);
     }
