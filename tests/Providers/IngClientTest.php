@@ -32,17 +32,17 @@ class IngClientTest extends KernelTestCase
         $kernel = self::bootKernel();
         $ingClient = static::getContainer()->get(IngClient::class);
 
-        $method = "POST";
+        $method = "post";
         $url = "/foo?param=value&pet=dog";
         $date = "Sun, 05 Jan 2014 21:31:40 GMT";
         $digest = "SHA-256=X48E9qOokqqrvdts8nOJRJN3OWDUoyWxBf7kbu9DBPE=";
 
-        $data = strtolower(trim("(request-target): $method $url\ndate: $date\ndigest: $digest"));
+        $data = trim("(request-target): $method $url\ndate: $date\ndigest: $digest");
         $signature = base64_decode($ingClient->getSignature($method, $url, $date, $digest));
-        $certPath = $_ENV['CERTIFICATE_PATH_SIGNING'];
+        $certPath = $_ENV['PEM_PATH_SIGNING'];
         $publicKey = openssl_get_publickey(file_get_contents($certPath));
 
-        $verify = openssl_verify($data, $signature, $publicKey);
+        $verify = openssl_verify($data, $signature, $publicKey, OPENSSL_ALGO_SHA256);
 
 
         $this->assertTrue((bool)$verify);
