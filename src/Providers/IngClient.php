@@ -82,7 +82,6 @@ class IngClient
             '/oauth2/token',
             [
                 'grant_type' => 'client_credentials',
-                'scope' => 'greetings:view'
             ]
         );
 

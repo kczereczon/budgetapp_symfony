@@ -15,6 +15,8 @@ class IngClientTest extends KernelTestCase
 //        $this->assertSame('test', $kernel->getEnvironment());
          $ingClient = static::getContainer()->get(IngClient::class);
          $token = $ingClient->getGeneralAccessToken();
+
+         $this->assertNotNull($token);
         // $myCustomService = static::getContainer()->get(CustomService::class);
     }
 
