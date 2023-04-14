@@ -93,6 +93,11 @@ class IngClient
         return 'SHA-256=' . base64_encode(hash('sha256', $body, true));
     }
 
+    public function getLoginScreen()
+    {
+
+    }
+
     /**
      * @throws Exception
      */
